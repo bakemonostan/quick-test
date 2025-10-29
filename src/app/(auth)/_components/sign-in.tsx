@@ -1,11 +1,10 @@
 "use client";
 import { X } from "lucide-react";
-import GoogleIcon from "./GoogleIcon";
+import GoogleSignInButton from "./GoogleSignInButton";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import VerifyToken from "./VerifyToken";
 import { useAuthStore } from "@/store/authStore";
-import { useGoogleLogin, } from "@react-oauth/google";
 import { toast } from "sonner";
 import useCustomMutation from "@/hooks/mutations/useCusotmMutation";
 import { useRouter } from "next/navigation";
@@ -28,7 +27,7 @@ interface ErrorResponse {
 export default function SignIn() {
   const { currentCard, headerText, resetCards, setEmail, setIsAuthenticated } =
     useAuthStore();
-    const { setUsername, setProfilePicture } = useUserStore();
+  const { setUsername, setProfilePicture } = useUserStore();
   const router = useRouter();
   const { refetchQuery } = useInvalidateQuery();
   const isGoogleAuthEnabled = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -54,53 +53,43 @@ export default function SignIn() {
     }
   );
 
-  const googleLogin = useGoogleLogin({
-    scope:
-      "email profile openid https://www.googleapis.com/auth/userinfo.profile",
-    onSuccess: async (tokenResponse) => {
-      try {
-        const userInfoResponse = await fetch(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-            },
-          }
-        );
-
-        const userInfo = await userInfoResponse.json();
-        setUsername(userInfo.given_name || userInfo.name);
-        setProfilePicture(userInfo.picture);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          toast.error("Error fetching Google user profile", {
-            description: error.message,
-          });
-        } else {
-          toast.error("Error fetching Google user profile");
+  const handleGoogleToken = async (accessToken: string) => {
+    try {
+      const userInfoResponse = await fetch(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      }
-      mutate(tokenResponse.access_token, {
-        onSuccess: () => {
-          setIsAuthenticated(true);
-          window.location.reload();
-          router.push("/dashboard/overview");
-          refetchQuery({ queryKey: ["dashboard data"] });
-        },
-        onError: (error: ErrorResponse) => {
-          toast.error("Login failed", {
-            description: error.message,
-          });
-        },
-      });
-    },
-    onError: () => {
-      toast.error("Google login failed");
-    },
-  });
+      );
 
-  const loginWithGoogle = () => {
-    googleLogin();
+      const userInfo = await userInfoResponse.json();
+      setUsername(userInfo.given_name || userInfo.name);
+      setProfilePicture(userInfo.picture);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error("Error fetching Google user profile", {
+          description: error.message,
+        });
+      } else {
+        toast.error("Error fetching Google user profile");
+      }
+    }
+
+    mutate(accessToken, {
+      onSuccess: () => {
+        setIsAuthenticated(true);
+        window.location.reload();
+        router.push("/dashboard/overview");
+        refetchQuery({ queryKey: ["dashboard data"] });
+      },
+      onError: (error: ErrorResponse) => {
+        toast.error("Login failed", {
+          description: error.message,
+        });
+      },
+    });
   };
 
   return (
@@ -130,11 +119,7 @@ export default function SignIn() {
               <div className="w-full h-[1px] bg-gray-200 flex-shrink"></div>
             </div>
             <div className="flex-center gap-4 border border-gray-200 rounded-xl w-max mx-auto p-5 mb-6">
-              <div
-                onClick={loginWithGoogle}
-                className="cursor-pointer">
-                <GoogleIcon />
-              </div>
+              <GoogleSignInButton onToken={handleGoogleToken} />
             </div>
           </>
         )}
