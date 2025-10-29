@@ -1,0 +1,19 @@
+
+.root {
+  cursor: pointer;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  transition: width 250ms ease;
+
+  &[data-active] {
+    width: 16px;
+  }
+}
+
+
+.controls {
+  z-index: 100;
+}

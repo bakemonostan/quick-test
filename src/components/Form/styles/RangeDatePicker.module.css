@@ -1,0 +1,65 @@
+
+
+
+.day {
+  &[data-selected="true"] {
+    background-color: var(--mantine-color-yellow-3);
+  }
+  &[data-in-range] {
+    background-color: var(--mantine-color-yellow-1);
+  }
+  &[data-first-in-range] {
+    background-color: var(--mantine-color-yellow-3);
+  }
+  &[data-last-in-range] {
+    background-color: var(--mantine-color-yellow-3);
+  }
+  &[data-weekend="true"] {
+    color: var(--mantine-color-yellow-5);
+  }
+}
+
+
+
+.mantine-DatePickerInput-wrapper {
+  border: 2px solid red;
+}
+
+.mantine-DatePickerInput-input {
+  border: 2px solid blue;
+}
+
+.mantine-DatePickerInput-section {
+  border: 2px solid green;
+}
+.mantine-DatePickerInput-input {
+  border: 2px solid yellow;
+}
+
+.monthCell {
+  padding: 0px;
+}
+
+.mantine-DatePickerInput-wrapper {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.mantine-DatePickerInput-input {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.mantine-DatePickerInput-section {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.mantine-DatePickerInput-root {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}

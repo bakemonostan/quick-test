@@ -1,0 +1,29 @@
+.root {
+  background: linear-gradient(to right, #FFCB4E, #AD75E2);
+
+  &::before {
+    background-color: var(--mantine-primary-color-filled);
+  }
+}
+
+.description,
+.title {
+  color: var(--mantine-color-black);
+}
+
+.closeButton {
+  color: var(--mantine-color-black);
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+}
+
+/* 
+root: classes.root,
+closeButton: classes.closeButton,
+body: classes.body,
+title: classes.title,
+description: classes.description,
+icon: classes.icon,
+loader: classes.loader, */
