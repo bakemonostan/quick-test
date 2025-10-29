@@ -20,7 +20,7 @@ NEXT_PUBLIC_API_BASE_URL=https://dev-api.kaparki.nl/api
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id_here
 NEXT_PUBLIC_ENV=development
-```
+``````
 
 
 
